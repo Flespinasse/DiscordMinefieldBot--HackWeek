@@ -14,7 +14,7 @@ And yes, we code ourselves the games!
 N.B.: Minesweeper Interactive version is currently in beta and can have some bugs. We're working on the code to squash as many bugs as we can.
 
 ## Can I add it on my server?
-Of course you can! Just click on that link
+Not now. We wait until the end of Hack Week before the bot gets public to anyone. But you can DM me on Discord and I'll add it on your server if you want ;) (please note that I must join your server and have the manage server permission to invite the bot)
 
 
 ## What are the commands?
