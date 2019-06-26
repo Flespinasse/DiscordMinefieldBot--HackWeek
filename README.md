@@ -14,7 +14,7 @@ And yes, we code ourselves the games!
 N.B.: Minesweeper Interactive version is currently in beta and can have some bugs. We're working on the code to squash as many bugs as we can.
 
 ## Can I add it on my server?
-Not now. We wait until the end of Hack Week before the bot gets public to anyone. But you can DM me on Discord and I'll add it on your server if you want ;) (please note that I must join your server and have the manage server permission to invite the bot)
+Not now. We wait until the end of Hack Week before the bot gets public to anyone.
 
 
 ## What are the commands?
@@ -25,5 +25,5 @@ They are listed below
 
 **Other commands**:
 - `ms.game_rules [game]` -> See the rules of a game. If the game is not given, will show all the games available on the bot.
-- `ms.help [command]` -> Shows the list of commands, including the help of help command (usefulness = 0.00000000000000000001%)
+- `ms.help [command]` -> Shows the list of commands, as well as syntax and aliases, including the help of help command (usefulness = 0.00000000000000000001%)
 - `ms.credits` or `ms.about` -> Shows info about the bot and its creators. *Seriously, does anyone read this?*
