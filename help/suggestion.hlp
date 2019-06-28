@@ -1,0 +1,6 @@
+Suggestion
+suggestion
+`suggestion`
+Send a suggestion
+Sends a suggestion to the developers. Once sent, it will be evaluated by the community in function of how good it is before the devs implement it in the bot.
+`ms.suggestion <suggestion (accepts spaces)>`

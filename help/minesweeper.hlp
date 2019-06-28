@@ -1,0 +1,6 @@
+Minesweeper
+minesweeper
+`minesweeper`, `msgame`, `minegame`
+Play Minesweeper on Discord!
+Play Minesweeper on Discord, in Spoiler mode or Interactive mode. If the amount of mines is not given, it will be randomized between 12 and 45. I recommend you read the rules first (`ms.game_rules minesweeper`)
+`ms.minesweeper [amount of mines]`

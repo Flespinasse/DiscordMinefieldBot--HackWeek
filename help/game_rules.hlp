@@ -1,0 +1,6 @@
+Game Rules
+game_rules
+`game_rules`, `rules`, `howtoplay`
+Shows a game's rules
+Shows the detailled rules of a game. Shows the goal and how to play.
+`ms.game_rules [game]`

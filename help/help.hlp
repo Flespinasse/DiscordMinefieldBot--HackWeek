@@ -1,0 +1,6 @@
+Help
+help
+`help`
+Shows this
+Shows the details, aliases and syntax of a command. If the command is not given, you'll get a list of all commands on the bot.
+`ms.help [command]`
