@@ -1,0 +1,14 @@
+Rock Paper Scissors
+Rock, Paper, Scissors is a game where you choose between three moves to beat your opponent
+Rock, Paper, Scissors
+Rock, Paper, Scissors is a game where you choose between three moves to beat your opponent
+The moves
+You choose between Rock, Paper and Scissors. You decide which move, and the machine randomizes his move. Once both have chosen, they are compared following the following
+Rock
+The Rock beats the Scissors but is beaten by the Paper
+Paper
+The Paper beats the Rock but is beaten by the Scissors
+Scissors
+The Scissors beats the Paper but is beaten by the Rock
+Points
+When you beat the opponent you get a point. Once you reach the goal (number of points required to win) you win. That's it!
