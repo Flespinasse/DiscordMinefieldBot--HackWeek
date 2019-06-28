@@ -16,7 +16,7 @@ This bot was made for Discord Hack Week event in 2019, but we will keep the deve
 N.B.: Minesweeper Interactive version is currently in beta and can have some bugs. We're working on the code to squash as many bugs as we can.
 
 ## Can I add it on my server?
-Not now. We wait until the end of Hack Week before the bot gets public to anyone.
+Yes! Here's the link: https://discordapp.com/oauth2/authorize?client_id=594134805692547103&scope=bot&permissions=1409674320
 
 
 ## What are the commands?
