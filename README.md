@@ -4,11 +4,13 @@
 Discord Minefield is a Discord bot that allows you to play Python-coded games on Discord!
 And yes, we code ourselves the games!
 
+This bot was made for Discord Hack Week event in 2019, but we will keep the development active.
+
 **Current games on the bot:**
 - Minesweeper
   - Spoiler version (the one that you see everywhere on Discord)
   - Interactive version (send tile coordinates, reveal tiles, flag tiles, win and lose, just like a **true minesweeper game**!)
-- Catch the Wumpus (Hunt the Wumpus but we replaced violence with a lost Wumpus)
+- Rock Paper Scissors (we wanted to code a Hunt the Wumpus game (but Catch instead of Hunt) but we didn't have enough time...)
 - More coming soon!
 
 N.B.: Minesweeper Interactive version is currently in beta and can have some bugs. We're working on the code to squash as many bugs as we can.
