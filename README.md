@@ -17,6 +17,8 @@ N.B.: Minesweeper Interactive version is currently in beta and can have some bug
 
 ## Can I add it on my server?
 Yes! Here's the link: https://discordapp.com/oauth2/authorize?client_id=594134805692547103&scope=bot&permissions=1409674320
+Consider joining our support server, maybe in the future you may get some extra stuff, idk...
+Server link: https://discord.gg/SxyWxWq
 
 
 ## What are the commands?
