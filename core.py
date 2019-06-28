@@ -76,7 +76,7 @@ async def reload_all(ctx):
 @bot.command()
 @commands.cooldown(1, 86400, type=commands.BucketType.user)
 async def suggestion(ctx, *, idea):
-	if not suggestion:
+	if not idea:
 		await ctx.send("Please send me your suggestion within the next 3 minutes!")
 
 		def suggestionMessage(message):
@@ -88,7 +88,7 @@ async def suggestion(ctx, *, idea):
 		except asyncio.TimeoutError:
 			await ctx.send("You timed out!")
 			return
-		suggestion = content
+		idea = content
 	
 	async with ctx.channel.typing():
 		embed = discord.Embed(title=f"{ctx.author.name} has a suggestion. Vote now!", description=idea, color=0x4287f5)
