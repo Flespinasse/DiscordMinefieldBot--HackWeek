@@ -16,9 +16,9 @@ This bot was made for Discord Hack Week event in 2019, but we will keep the deve
 N.B.: Minesweeper Interactive version is currently in beta and can have some bugs. We're working on the code to squash as many bugs as we can.
 
 ## Can I add it on my server?
-Yes! Here's the link: \https://discordapp.com/oauth2/authorize?client_id=594134805692547103&scope=bot&permissions=1409674320
+Yes! (Click to invite the bot)[https://discordapp.com/oauth2/authorize?client_id=594134805692547103&scope=bot&permissions=1409674320]
 Consider joining our support server, maybe in the future you may get some extra stuff, idk...
-Server link: \https://discord.gg/SxyWxWq
+(Server link)[https://discord.gg/SxyWxWq]
 
 
 ## What are the commands?
