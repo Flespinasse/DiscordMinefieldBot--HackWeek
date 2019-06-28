@@ -1,0 +1,14 @@
+Minesweeper
+Watch out! There are mines everywhere! Don't touch them!
+Minesweeper
+The Minesweeper is a game where you have to find all mines without uncovering them.
+The tiles
+Each tile says the number of mine there are in the 8 surrounding tiles.
+The mines
+When you uncover a mine, you die. That's it!
+The flag
+The flag helps you to mark tiles where you think there are mines.
+How to win?
+You win once you put flags on all the mines (and only the mines) or once you uncovered all the tiles except the mines.
+Discord syntax?
+7,4 selects Tile 1 of Line 1. 5,3 selects Tile 3 of Line 5. etc... etc...
