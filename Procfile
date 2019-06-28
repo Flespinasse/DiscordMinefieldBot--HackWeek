@@ -1,1 +1,1 @@
--worker core.py
+-worker python core.py
