@@ -58,19 +58,19 @@ class RockPaperScissors(commands.Cog):
 	@commands.command(aliases=['rockpaperscissors', 'rpsgame', 'rps_game', 'rock_paper_scissors'])
 	@commands.cooldown(1, 60, type=commands.BucketType.user)
 	async def rockgame(self, ctx, points=None):
-            game_embed = await ctx.send("Preparing game")
-                if not points:
-            await game_embed.edit(embed=discord.Embed(title="Please send me a number of points", description="The number of points should be between 3 and 30. **Please send the number directly in the tchat without the command and/or the prefix**")) 
-		        def ask_points(message):
-			        return message.author == ctx.author
+		game_embed = await ctx.send("Preparing game")
+		if not points:
+			await game_embed.edit(embed=discord.Embed(title="Please send me a number of points", description="The number of points should be between 3 and 30. **Please send the number directly in the tchat without the command and/or the prefix**")) 
+		def ask_points(message):
+			return message.author == ctx.author
 		
-		        choice = None
-		        try:
-			        message = await self.bot.wait_for('message', timeout=60.0, check=ask_points)
-			        choice = message
-		        except asyncio.TimeoutError:
-			        await game_embed.edit(embed=discord.Embed(title="Timeout", description="You took too many time to give me amount of points", color=discord.Colour(0xff0000)))
-			        return
+			choice = None
+			try:
+				message = await self.bot.wait_for('message', timeout=60.0, check=ask_points)
+				choice = message
+			except asyncio.TimeoutError:
+				await game_embed.edit(embed=discord.Embed(title="Timeout", description="You took too many time to give me amount of points", color=discord.Colour(0xff0000)))
+				return
 		try:
 			if int(choice.content) < 3 or int(choice.content) > 30:
 				raise Exception
