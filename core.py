@@ -158,7 +158,9 @@ async def bugreport(ctx):
 		color = discord.Colour(0xff0000)
 		bugMessage = "Report game-breaking bug"
 	
-	await bugEmbed.edit(embed=discord.Embed(title=bugMessage, description="What did you do before the bug happened?", color=color))
+	embedBug = discord.Embed(title=bugMessage, description="Here's the bug", color=color)
+	embedBug.add_field(name="What did you do before the bug happened?", value="**Waiting for user**")
+	await bugEmbed.edit(embed=embedBug)
 	def bugstep(message):
 		return message.author == ctx.author
 	
@@ -169,7 +171,11 @@ async def bugreport(ctx):
 	except asyncio.TimeoutError:
 		await bugEmbed.edit(embed=discord.Embed(title="Timeout", description="You timed out. Bug report cancelled", color=discord.Colour(0xff0000)))
 		return
-	await bugEmbed.edit(embed=discord.Embed(title=bugMessage, description="What did you expect to happen?", color=color))
+	
+	embedBug.remove_field(-1)
+	embedBug.add_field(name="What did you do before the bug happened?", value=how_happen)
+	embedBug.add_field(name="What did you expect to happen?", value="**Waiting for user**")
+	await bugEmbed.edit(embed=embedBug)
 
 	what_happen_expect = None
 	try:
@@ -178,7 +184,10 @@ async def bugreport(ctx):
 	except asyncio.TimeoutError:
 		await bugEmbed.edit(embed=discord.Embed(title="Timeout", description="You timed out. Bug report cancelled", color=discord.Colour(0xff0000)))
 		return
-	await bugEmbed.edit(embed=discord.Embed(title=bugMessage, description="What happened?", color=color))
+	embedBug.remove_field(-1)
+	embedBug.add_field(name="What did you expect to happen?", value=what_happen_expect)
+	embedBug.add_field(name="What happened?", value="**Waiting for user**")
+	await bugEmbed.edit(embed=embedBug)
 
 	what_happen_real = None
 	try:
@@ -189,9 +198,9 @@ async def bugreport(ctx):
 		return
 	
 	finalembed=discord.Embed(title=bugMessage, description="Are these informations correct?", color=color)
-	finalembed.add_field(name="What were you doing before the bug?", value=how_happen)
-	finalembed.add_field(name="Result expected?", value=what_happen_expect)
-	finalembed.add_field(name="Result got?", value=what_happen_real)
+	finalembed.add_field(name="What did you do before the bug happened?", value=how_happen)
+	finalembed.add_field(name="What did you expect to happen?", value=what_happen_expect)
+	finalembed.add_field(name="What happened?", value=what_happen_real)
 	await bugEmbed.edit(embed=finalembed)
 	await bugEmbed.add_reaction('✅')
 	await bugEmbed.add_reaction('❌')
