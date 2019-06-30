@@ -20,7 +20,7 @@ import os
 
 TOKEN = str(os.environ.get('bot_token'))
 botPrefix = "ms."
-botVersion = "1.0.0"
+botVersion = "1.0.1"
 officialGuildID = 593693761528397835
 suggestionsChannel = 593702550838968341
 suggestionsAnswers = 593707316218560531
