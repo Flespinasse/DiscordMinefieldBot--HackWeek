@@ -61,8 +61,8 @@ class RockPaperScissors(commands.Cog):
 		game_embed = await ctx.send("Preparing game")
 		if not points:
 			await game_embed.edit(embed=discord.Embed(title="Please send me a number of points", description="The number of points should be between 3 and 30. **Please send the number directly in the tchat without the command and/or the prefix**")) 
-		def ask_points(message):
-			return message.author == ctx.author
+			def ask_points(message):
+				return message.author == ctx.author
 		
 			choice = None
 			try:
