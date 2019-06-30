@@ -1,4 +1,4 @@
- ######################################################################## 
+ ########################################################################
 #                                                                        #
 #          ####    ###   #####   #####   #####   #####   ####            #
 #          #   #    #    #       #       #   #   #   #   #   #           #
@@ -14,7 +14,7 @@
 #    #   #   #   #   #       #  ##      # # #   #       #       #  ##    #
 #    #   #   #   #   #####   #   #      #####   #####   #####   #   #    #
 #                                                                        #
- ######################################################################## 
+ ########################################################################
 
 import random
 import discord
@@ -131,9 +131,9 @@ def reveal_process(grid, grid_priv, tile, win_rules):
     else:
         grid[l][t] = grid_priv[l][t]
         win_rules['tiles_left'] -= 1
-    
+
     return grid, grid_priv, win_rules
-    
+
 
 def flag_action(grid, grid_priv, tile, win_rules):
     l, t = tile
@@ -142,30 +142,30 @@ def flag_action(grid, grid_priv, tile, win_rules):
         win_rules['flags_right'] -= 1
     else:
         win_rules['flags_wrong'] += 1
-    
+
     return grid, grid_priv, win_rules
 
 
 def gameover_show(grid, grid_priv, tile):
-	ligne, colonne = tile
-	grid[ligne][colonne] = 'mine_revealed'
-	resultat = "Grid:\n"
-	for l in range(len(grid)):
-		for t in range(len(grid)):
-			if grid[l][t] == 'mine_revealed':
-				resultat += discord_emojis['mine_revealed']
-			elif grid_priv[l][t] == '*':
-				if grid[l][t] == 'flag':
-					resultat += discord_emojis['flag']
-				else:
-					resultat += discord_emojis['mine_not_found']
-			elif grid[l][t] == 'flag':
-				if grid_priv[l][t] != '*':
-					resultat += discord_emojis['no_flag']
-			else:
-				resultat += discord_emojis[grid[l][t]]
-		resultat += '\n'
-	return resultat
+    ligne, colonne = tile
+    grid[ligne][colonne] = 'mine_revealed'
+    resultat = "Grid:\n"
+    for l in range(len(grid)):
+        for t in range(len(grid)):
+            if grid[l][t] == 'mine_revealed':
+                resultat += discord_emojis['mine_revealed']
+            elif grid_priv[l][t] == '*':
+                if grid[l][t] == 'flag':
+                    resultat += discord_emojis['flag']
+                else:
+                    resultat += discord_emojis['mine_not_found']
+            elif grid[l][t] == 'flag':
+                if grid_priv[l][t] != '*':
+                    resultat += discord_emojis['no_flag']
+            else:
+                resultat += discord_emojis[grid[l][t]]
+        resultat += '\n'
+    return resultat
 
 def win_show(grid, grid_priv):
     resultat = "Grid:\n"
@@ -181,7 +181,7 @@ class Minesweeper(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-
+    
     @commands.command(name='minesweeper', aliases=['msgame', 'minegame'])
     async def _minesweeper(self, ctx, nb_mines=None):
         game_ask = await ctx.send(f"Would you want to play **spoiler version** {discord_emojis['hidden']} or **interactive version** {discord_emojis['reveal']} ?")
@@ -229,15 +229,15 @@ class Minesweeper(commands.Cog):
                 public = generate_grid_public(9)
                 game_board = await ctx.send("Preparing board...")
                 await ctx.send("Send me tile coordinates (must look like this: `1,1` ; `9,9` ; `5,7` ; etc...)\nDon't forget to read the **minesweeper rules** before playing.\nTo stop playing, type `cancel` or `stop`. Please note that **your game won't be resumed later if you stop playing**.\nYou can pause the game by doing `pause`. This allows you to \"save your game\" up to 10 minutes. After this time limit, your game will be deleted.")
-                
+                    
                 print(print_grid(priv))
 
                 def coordinates_wait(m):
                     return m.author == ctx.author and m.channel.id == ctx.message.channel.id
-                
+
                 def pause_game_check(reaction):
                     return reaction.user_id == ctx.author.id and str(reaction.emoji.name) == '✅'
-                
+
                 win_rules = dict()
                 win_rules["tiles_left"] = 81-int(nb_mines)
                 win_rules["flags_right"] = int(nb_mines)
@@ -271,7 +271,7 @@ class Minesweeper(commands.Cog):
                         await ctx.send(f"{ctx.author.mention}, your game has been stopped.")
                         return
                     try:
-                        ligne, nani, colonne = tuple(ntile)
+                        ligne, nani, colonne = tuple(message.content)
                         ligne = int(ligne) - 1
                         colonne = int(colonne) - 1
                         if ligne > 8 or colonne > 8 or ligne < 0 or colonne < 0:
@@ -318,7 +318,7 @@ class Minesweeper(commands.Cog):
                                 elif str(reaction.emoji.name) == '❌':
                                     public[ligne][colonne] = 'hidden'
                                 await embed_choice.delete()
-                                
+
                         elif public[ligne][colonne] == 'flag':
                             public[ligne][colonne] == 'flag_selected'
                             await game_board.edit(content=print_discord(public, "interactive"))
@@ -347,17 +347,17 @@ class Minesweeper(commands.Cog):
                                 await embed_choice.delete()
                     if win_rules['tiles_left'] == 0:
                         await ctx.send("All tiles have been revealed. Congratulations, you won!")
-			await game_board.edit(content=win_show(public, priv))
+                        await game_board.edit(content=win_show(public, priv))
                         return
                     elif win_rules['flags_right'] == 0:
                         if win_rules['flags_wrong'] == 0:
-			    await game_board.edit(content=win_show(public, priv))
+                            await game_board.edit(content=win_show(public, priv))
                             await ctx.send("All mines have been flagged. Congratulations, you won!")
                             return
 
-                    
-                    
-                
+
+
+
 
 
 
