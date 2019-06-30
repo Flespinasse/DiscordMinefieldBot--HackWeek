@@ -18,7 +18,7 @@
 
 import discord
 from discord.ext import commands
-import random
+import random 
 import asyncio
 
 scis = '<:victory_hand:594115983728443392>'
@@ -58,9 +58,9 @@ class RockPaperScissors(commands.Cog):
 	@commands.command(aliases=['rockpaperscissors', 'rpsgame', 'rps_game', 'rock_paper_scissors'])
 	@commands.cooldown(1, 60, type=commands.BucketType.user)
 	async def rockgame(self, ctx, points=None):
-                game_embed = await ctx.send("Preparing game")
+            game_embed = await ctx.send("Preparing game")
                 if not points:
-		        await game_embed.edit(embed=discord.Embed(title="Please send me a number of points", description="The number of points should be between 3 and 30. **Please send the number directly in the tchat without the command and/or the prefix**")) 
+            await game_embed.edit(embed=discord.Embed(title="Please send me a number of points", description="The number of points should be between 3 and 30. **Please send the number directly in the tchat without the command and/or the prefix**")) 
 		        def ask_points(message):
 			        return message.author == ctx.author
 		
