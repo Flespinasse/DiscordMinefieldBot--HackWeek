@@ -121,7 +121,7 @@ class RockPaperScissors(commands.Cog):
 			elif str(choice) == scis:
 				await game_embed.remove_reaction(scis, ctx.author)
 				player_play = "3"
-			player_last, com_last, round_last = who_wins_round(com_play, player_play)
+			com_last, player_last, round_last = who_wins_round(com_play, player_play)
 			if round_last == "You":
 				round_last = ctx.author.name
 				player += 1
