@@ -271,8 +271,7 @@ class Minesweeper(commands.Cog):
                         await ctx.send(f"{ctx.author.mention}, your game has been stopped.")
                         return
                     try:
-                        ntile = message.content.replace(',','')
-                        ligne, colonne = tuple(ntile)
+                        ligne, nani, colonne = tuple(ntile)
                         ligne = int(ligne) - 1
                         colonne = int(colonne) - 1
                         if ligne > 8 or colonne > 8 or ligne < 0 or colonne < 0:
@@ -348,9 +347,11 @@ class Minesweeper(commands.Cog):
                                 await embed_choice.delete()
                     if win_rules['tiles_left'] == 0:
                         await ctx.send("All tiles have been revealed. Congratulations, you won!")
+			await game_board.edit(content=win_show(public, priv))
                         return
                     elif win_rules['flags_right'] == 0:
                         if win_rules['flags_wrong'] == 0:
+			    await game_board.edit(content=win_show(public, priv))
                             await ctx.send("All mines have been flagged. Congratulations, you won!")
                             return
 
