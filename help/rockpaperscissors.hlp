@@ -2,5 +2,5 @@ Rock Paper Scissors
 rockpaperscissors
 `rockpaperscissors`, `rockgame`, `rpsgame`, `rps_game`, `rock_paper_scissors`
 Play Rock, Paper, Scissors
-Play Rock, Paper, Scissors on Discord!
-`ms.rockpaperscissors`
+Play Rock, Paper, Scissors on Discord! If points is not given, you will have to send it directly in the tchat. If incorrect, it will be 10.
+`ms.rockpaperscissors <points>`
