@@ -189,9 +189,9 @@ class Minesweeper(commands.Cog):
         await game_ask.add_reaction(discord_emojis['hidden'])
 
         def game_ask_check(reaction):
-            if reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis["reveal"]):
+            if reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis["reveal"]) and reaction.message_id == ctx.message.id:
                 return "Interactive"
-            elif reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis['hidden']):
+            elif reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis['hidden']) and reaction.message_id == ctx.message.id:
                 return "Classic"
 
         choice = None
@@ -205,7 +205,7 @@ class Minesweeper(commands.Cog):
             if str(choice.emoji) == discord_emojis['hidden']:
                 try:
                     if int(nb_mines) > 45 or int(nb_mines) < 12:
-                        await ctx.send("Number of mines should be between 12 and 5. Randomizing amount...")
+                        await ctx.send("Number of mines should be between 12 and 45. Randomizing amount...")
                         nb_mines = random.randint(12,45)
                 except Exception:
                     await ctx.send("Number of mines not given. Randomizing between 12 and 45...")
@@ -228,15 +228,12 @@ class Minesweeper(commands.Cog):
                 priv = calculate(base)
                 public = generate_grid_public(9)
                 game_board = await ctx.send("Preparing board...")
-                await ctx.send("Send me tile coordinates (must look like this: `1,1` ; `9,9` ; `5,7` ; etc...)\nDon't forget to read the **minesweeper rules** before playing.\nTo stop playing, type `cancel` or `stop`. Please note that **your game won't be resumed later if you stop playing**.\nYou can pause the game by doing `pause`. This allows you to \"save your game\" up to 10 minutes. After this time limit, your game will be deleted.")
+                await ctx.send("Send me tile coordinates (must look like this: `1,1` ; `9,9` ; `5,7` ; `y,x` ; etc...)\nDon't forget to read the **minesweeper rules** before playing.\nTo stop playing, type `cancel` or `stop`. Please note that **your game won't be resumed later if you stop playing**.\nYou can pause the game by doing `pause`. This allows you to \"save your game\" up to 10 minutes. After this time limit, your game will be deleted.")
                     
                 print(print_grid(priv))
 
                 def coordinates_wait(m):
-                    return m.author == ctx.author and m.channel.id == ctx.message.channel.id
-
-                def pause_game_check(reaction):
-                    return reaction.user_id == ctx.author.id and str(reaction.emoji.name) == '✅'
+                    return m.author == ctx.author and m.channel == ctx.message.channel
 
                 win_rules = dict()
                 win_rules["tiles_left"] = 81-int(nb_mines)
@@ -260,6 +257,8 @@ class Minesweeper(commands.Cog):
                         return
                     if message.content == "pause":
                         pause_msg = await ctx.send("Game has been paused. You have 10 minutes before the game is cancelled/stopped.")
+                        def pause_game_check(reaction):
+                            return reaction.user_id == ctx.author.id and str(reaction.emoji.name) == '✅' and pause_msg.id == reaction.message_id
                         await pause_msg.add_reaction('✅')
                         try:
                             m = await self.bot.wait_for('raw_reaction_add', timeout=600.0, check=pause_game_check)
@@ -270,90 +269,91 @@ class Minesweeper(commands.Cog):
                     elif message.content == "stop" or message.content == "cancel":
                         await ctx.send(f"{ctx.author.mention}, your game has been stopped.")
                         return
-                    try:
-                        ligne, nani, colonne = tuple(message.content)
-                        ligne = int(ligne) - 1
-                        colonne = int(colonne) - 1
-                        if ligne > 8 or colonne > 8 or ligne < 0 or colonne < 0:
-                            raise Exception
-                        await message.delete()
-                    except Exception:
-                        nope_message = await ctx.send("Invalid user input")
-                        await asyncio.sleep(2)
-                        await nope_message.delete()
                     else:
-                        if public[ligne][colonne] == priv[ligne][colonne]:
-                            nope_message = await ctx.send(embed=discord.Embed(description="__You must select a **hidden** or **flagged** tile__"))
-                            await asyncio.sleep(2.5)
+                        try:
+                            ligne, nani, colonne = tuple(message.content)
+                            ligne = int(ligne) - 1
+                            colonne = int(colonne) - 1
+                            if ligne > 8 or colonne > 8 or ligne < 0 or colonne < 0:
+                                raise Exception
+                            await message.delete()
+                        except Exception:
+                            nope_message = await ctx.send("Invalid user input")
+                            await asyncio.sleep(2)
                             await nope_message.delete()
-                        elif public[ligne][colonne] == 'hidden':
-                            public[ligne][colonne] = 'hidden_selected'
-                            await game_board.edit(content=print_discord(public, 'interactive'))
-                            embed=discord.Embed(title="What would you want to do?")
-                            embed.add_field(name="Reveal tile", value=f"React with {discord_emojis['reveal']}", inline=True)
-                            embed.add_field(name="Flag the tile", value=f"React with {discord_emojis['flag_action']}", inline=True)
-                            embed.set_footer(text="Wrong tile? Click on the ❌ reaction!")
-                            embed_choice = await ctx.send(embed=embed)
-                            await embed_choice.add_reaction(discord_emojis['reveal'])
-                            await embed_choice.add_reaction(discord_emojis['flag_action'])
-                            await embed_choice.add_reaction('❌')
-                            def action_check(reaction):
-                                if reaction.user_id == ctx.author.id and str(reaction.emoji) == discord_emojis["reveal"]:
-                                    return True
-                                elif reaction.user_id == ctx.author.id and str(reaction.emoji) == discord_emojis['flag_action']:
-                                    return True
-                                elif reaction.user_id == ctx.author.id and str(reaction.emoji.name) == '❌':
-                                    return True
-                            reaction = None
-                            try:
-                                r = await self.bot.wait_for('raw_reaction_add', timeout=180.0, check=action_check)
-                                reaction = r
-                            except asyncio.TimeoutError:
-                                await ctx.send(f"{ctx.author.mention} took too many time to respond. Game stopped.")
-                            else:
-                                if str(reaction.emoji) == discord_emojis['reveal']:
-                                    public, priv, win_rules = reveal_process(public, priv, (ligne, colonne), win_rules)
-                                elif str(reaction.emoji) == discord_emojis['flag_action']:
-                                    public, priv, win_rules = flag_action(public, priv, (ligne, colonne), win_rules)
-                                elif str(reaction.emoji.name) == '❌':
-                                    public[ligne][colonne] = 'hidden'
-                                await embed_choice.delete()
+                        else:
+                            if public[ligne][colonne] == priv[ligne][colonne]:
+                                nope_message = await ctx.send(embed=discord.Embed(description="__You must select a **hidden** or **flagged** tile__"))
+                                await asyncio.sleep(2.5)
+                                await nope_message.delete()
+                            elif public[ligne][colonne] == 'hidden':
+                                public[ligne][colonne] = 'hidden_selected'
+                                await game_board.edit(content=print_discord(public, 'interactive'))
+                                embed=discord.Embed(title="What would you want to do?")
+                                embed.add_field(name="Reveal tile", value=f"React with {discord_emojis['reveal']}", inline=True)
+                                embed.add_field(name="Flag the tile", value=f"React with {discord_emojis['flag_action']}", inline=True)
+                                embed.set_footer(text="Wrong tile? Click on the ❌ reaction!")
+                                embed_choice = await ctx.send(embed=embed)
+                                await embed_choice.add_reaction(discord_emojis['reveal'])
+                                await embed_choice.add_reaction(discord_emojis['flag_action'])
+                                await embed_choice.add_reaction('❌')
+                                def action_check(reaction):
+                                    if reaction.user_id == ctx.author.id and str(reaction.emoji) == discord_emojis["reveal"] and reaction.message_id == embed_choice.id:
+                                        return True
+                                    elif reaction.user_id == ctx.author.id and str(reaction.emoji) == discord_emojis['flag_action'] and reaction.message_id == embed_choice.id:
+                                        return True
+                                    elif reaction.user_id == ctx.author.id and str(reaction.emoji.name) == '❌' and reaction.message_id == embed_choice.id:
+                                        return True
+                                reaction = None
+                                try:
+                                    r = await self.bot.wait_for('raw_reaction_add', timeout=180.0, check=action_check)
+                                    reaction = r
+                                except asyncio.TimeoutError:
+                                    await ctx.send(f"{ctx.author.mention} took too many time to respond. Game stopped.")
+                                else:
+                                    if str(reaction.emoji) == discord_emojis['reveal']:
+                                        public, priv, win_rules = reveal_process(public, priv, (ligne, colonne), win_rules)
+                                    elif str(reaction.emoji) == discord_emojis['flag_action']:
+                                        public, priv, win_rules = flag_action(public, priv, (ligne, colonne), win_rules)
+                                    elif str(reaction.emoji.name) == '❌':
+                                        public[ligne][colonne] = 'hidden'
+                                    await embed_choice.delete()
 
-                        elif public[ligne][colonne] == 'flag':
-                            public[ligne][colonne] == 'flag_selected'
-                            await game_board.edit(content=print_discord(public, "interactive"))
-                            embed=discord.Embed(title="What would you want to do?")
-                            embed.add_field(name="Reveal tile", value=f"React with {discord_emojis['reveal']}", inline=True)
-                            embed.set_footer(text="Wrong tile? Click on the ❌ reaction!")
-                            embed_choice = await ctx.send(embed=embed)
-                            await embed_choice.add_reaction(discord_emojis['reveal'])
-                            await embed_choice.add_reaction('❌')
-                            def action_check(reaction):
-                                if reaction.user_id == ctx.author.id and str(reaction.emoji) == discord_emojis["reveal"]:
-                                    return True
-                                elif reaction.user_id == ctx.author.id and str(reaction.emoji.name) == '❌':
-                                    return True
-                            reaction = None
-                            try:
-                                r = await self.bot.wait_for('raw_reaction_add', timeout=180.0, check=action_check)
-                                reaction = r
-                            except asyncio.TimeoutError:
-                                await ctx.send(f"{ctx.author.mention} took too many time to respond. Game stopped.")
-                            else:
-                                if str(reaction.emoji) == discord_emojis['reveal']:
-                                    public, priv, win_rules = reveal_process(public, priv, (ligne, colonne), win_rules)
-                                elif str(reaction.emoji.name) == '❌':
-                                    public[ligne][colonne] = 'hidden'
-                                await embed_choice.delete()
-                    if win_rules['tiles_left'] == 0:
-                        await ctx.send("All tiles have been revealed. Congratulations, you won!")
-                        await game_board.edit(content=win_show(public, priv))
-                        return
-                    elif win_rules['flags_right'] == 0:
-                        if win_rules['flags_wrong'] == 0:
+                            elif public[ligne][colonne] == 'flag':
+                                public[ligne][colonne] = 'flag_selected'
+                                await game_board.edit(content=print_discord(public, "interactive"))
+                                embed=discord.Embed(title="What would you want to do?")
+                                embed.add_field(name="Reveal tile", value=f"React with {discord_emojis['reveal']}", inline=True)
+                                embed.set_footer(text="Wrong tile? Click on the ❌ reaction!")
+                                embed_choice = await ctx.send(embed=embed)
+                                await embed_choice.add_reaction(discord_emojis['reveal'])
+                                await embed_choice.add_reaction('❌')
+                                def action_check(reaction):
+                                    if reaction.user_id == ctx.author.id and str(reaction.emoji) == discord_emojis["reveal"] and reaction.message_id == embed_choice.id:
+                                        return True
+                                    elif reaction.user_id == ctx.author.id and str(reaction.emoji.name) == '❌' and reaction.message_id == embed_choice.id:
+                                        return True
+                                reaction = None
+                                try:
+                                    r = await self.bot.wait_for('raw_reaction_add', timeout=180.0, check=action_check)
+                                    reaction = r
+                                except asyncio.TimeoutError:
+                                    await ctx.send(f"{ctx.author.mention} took too many time to respond. Game stopped.")
+                                else:
+                                    if str(reaction.emoji) == discord_emojis['reveal']:
+                                        public, priv, win_rules = reveal_process(public, priv, (ligne, colonne), win_rules)
+                                    elif str(reaction.emoji.name) == '❌':
+                                        public[ligne][colonne] = 'flag'
+                                    await embed_choice.delete()
+                        if win_rules['tiles_left'] == 0:
+                            await ctx.send("All tiles have been revealed. Congratulations, you won!")
                             await game_board.edit(content=win_show(public, priv))
-                            await ctx.send("All mines have been flagged. Congratulations, you won!")
                             return
+                        elif win_rules['flags_right'] == 0:
+                            if win_rules['flags_wrong'] == 0:
+                                await game_board.edit(content=win_show(public, priv))
+                                await ctx.send("All mines have been flagged. Congratulations, you won!")
+                                return
 
 
 

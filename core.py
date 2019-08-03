@@ -29,7 +29,13 @@ discord_emojis[2] = '<:m2:593002786203893760>'
 discord_emojis[3] = '<:m3:593002786250162197>'
 discord_emojis[4] = '<:m4:593002786531049472>'
 
-bot = commands.Bot(command_prefix=config.botPrefix)
+bot = commands.Bot(
+	command_prefix=config.botPrefix,
+	description="A Discord bot that allows you to play games on Discord!",
+	owner_id=332857848252071938,
+	case_insensitive=True
+)
+
 bot.load_extension('Minesweeper')
 bot.load_extension('RockPaperScissors')
 
@@ -67,7 +73,11 @@ async def _help(ctx, *, command=None):
         return
     await ctx.send(embed=chf.help_complete(command))
 
+async def is_dev(ctx):
+	return str(ctx.author.id) in ['545671764185841665', '354872019818381313', '332857848252071938']
+
 @bot.command()
+@commands.check(is_dev)
 async def reload_all(ctx):
     if ctx.author.id == 332857848252071938:
         bot.reload_extension('Minesweeper')
@@ -77,10 +87,10 @@ async def reload_all(ctx):
 @commands.cooldown(1, 86400, type=commands.BucketType.user)
 async def suggestion(ctx, *, idea):
 	if not idea:
-		await ctx.send("Please send me your suggestion within the next 3 minutes!")
+		await ctx.send("Please send me your suggestion message within the next 3 minutes!")
 
 		def suggestionMessage(message):
-			return message.author == ctx.author
+			return message.author == ctx.author and message.channel == ctx.channel
 		content = None
 		try:
 			message = await bot.wait_for('message', timeout=180.0, check=suggestionMessage)
@@ -112,7 +122,7 @@ async def suggestion(ctx, *, idea):
 @bot.command(aliases=['joinus', 'supportserver', 'supportlink', 'officialserverlink'])
 async def invite(ctx):
 	embed=discord.Embed(title="Developers' server", description="https://discord.gg/SxyWxWq")
-	embed.set_footer(text="By joining our server you may get extra perms in future games")
+	embed.set_footer(text="By joining our server you may get extra stuff in future games")
 	await ctx.send(embed=embed)
 
 @bot.command(aliases=['bug_report', 'report_a_bug'])
@@ -161,8 +171,9 @@ async def bugreport(ctx):
 	embedBug = discord.Embed(title=bugMessage, description="Here's the bug", color=color)
 	embedBug.add_field(name="What did you do before the bug happened?", value="**Waiting for user**")
 	await bugEmbed.edit(embed=embedBug)
+
 	def bugstep(message):
-		return message.author == ctx.author
+		return message.author == ctx.author and message.channel == ctx.channel
 	
 	how_happen = None
 	try:
@@ -206,9 +217,9 @@ async def bugreport(ctx):
 	await bugEmbed.add_reaction('❌')
 
 	def correct_check(reaction):
-		if reaction.emoji.name == '✅':
+		if reaction.emoji.name == '✅' and reaction.message_id == ctx.message.id:
 			return reaction.user_id == ctx.author.id
-		elif reaction.emoji.name == '❌':
+		elif reaction.emoji.name == '❌' and reaction.message_id == ctx.message.id:
 			return reaction.user_id == ctx.author.id
 	
 	choice = None
@@ -231,7 +242,7 @@ async def bugreport(ctx):
 			await ctx.send(":thumbsup: Your bug has been reported and will be treated as soon as the devs can. **Please open your DMs so they can contact you if further information is needed**")
 			return
 	elif choice.emoji.name == '❌':
-		await ctx.send("Please re-invoke the command")
+		await ctx.send("Please re-invoke the command to fix your bug report.\nRemember: you can use the command only thrice in 6 hours!")
 		return
 
 @bot.command(aliases=['info'])
@@ -247,8 +258,6 @@ async def about(ctx):
 	embed.set_thumbnail(url=bot.user.avatar_url)
 	await ctx.send(embed=embed)
 
-async def is_dev(ctx):
-	return str(ctx.author.id) in ['545671764185841665', '354872019818381313', '332857848252071938']
 
 @bot.command()
 @commands.check(is_dev)
