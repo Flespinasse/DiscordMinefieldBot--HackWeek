@@ -3,7 +3,7 @@
 ## This bot is now open-source. Feel free to do anything you want with these files.
 Just one thing: don't learn from these files. The code is messy and needs a rewrite.
 
-=======================================================================================================================================
+==============================================================================================================================================================
 ## What is it?
 Discord Minefield is a Discord bot that allows you to play Python-coded games on Discord!
 And yes, we code ourselves the games!
