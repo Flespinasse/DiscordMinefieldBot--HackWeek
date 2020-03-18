@@ -189,9 +189,9 @@ class Minesweeper(commands.Cog):
         await game_ask.add_reaction(discord_emojis['hidden'])
 
         def game_ask_check(reaction):
-            if reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis["reveal"]) and reaction.message_id == ctx.message.id:
+            if reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis["reveal"]) and reaction.message_id == game_ask.id:
                 return "Interactive"
-            elif reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis['hidden']) and reaction.message_id == ctx.message.id:
+            elif reaction.user_id == ctx.author.id and str(reaction.emoji) == str(discord_emojis['hidden']) and reaction.message_id == game_ask.id:
                 return "Classic"
 
         choice = None
